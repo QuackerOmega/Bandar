@@ -1,4 +1,4 @@
-getgenv().start = true -- change to false if you want to stop it
+
 _, Protected_by_MoonSecV2, Discord = 'discord.gg/gQEH2uZxUk'
 
 
