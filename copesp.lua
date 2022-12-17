@@ -1,4 +1,4 @@
--- quacker's open source super amazing police detector 9000
+-- quacker's super amazing police detector 9000
 
 local camera = workspace.CurrentCamera
 local clr = Color3.new(1, 0, 0)
@@ -69,6 +69,7 @@ function ddc(drop)
 
     local function upd()
         game:GetService("RunService").RenderStepped:Connect(function()
+            
             if drop and game.Players:FindFirstChild(drop.Name) and drop.Character:FindFirstChild("Head") then
                 if drop.Character.Head then
                 DropText.Text = drop.Name .. " | Dist : ".. tostring(math.floor(game.Players.LocalPlayer:DistanceFromCharacter(drop.Character.Head.CFrame.Position)+0.5))
@@ -97,16 +98,26 @@ end
 
 
 -- cop players
-if not getgenv().executed then 
+local tagged = {}
+
     for i,v in next, game.Players:GetPlayers() do
         if v.Team.Name == "Polis DiRaja Malaysia" or v.Team.Name == "Polis Bantuan MyTransit" then
             ddc(v)
         end 
     end
 
-    game.Players.PlayerAdded:Connect(function(drop)
-        if drop.Team.Name == "Polis DiRaja Malaysia" or drop.Team.Name == "Polis Bantuan MyTransit" then
-            ddc(drop)
+    game:GetService("RunService").RenderStepped:Connect(function()
+        for i,drop in next, game.Players:GetPlayers() do
+            if drop ~= game.Players.LocalPlayer then
+                if drop.Team.Name == "Polis DiRaja Malaysia" or drop.Team.Name == "Polis Bantuan MyTransit" then
+                    for i,v in next, tagged do
+                        if drop.Name ~= v then    
+                        ddc(drop)
+                        table.insert(tagged,drop.Name)
+                        end
+                    end
+                end
+            end
         end
     end)
 
@@ -123,6 +134,3 @@ if not getgenv().executed then
         DrawDrop(drop)
         end
     end)
-    getgenv().executed = true
-else print("Already Executed!!!")
-end
